@@ -26,4 +26,5 @@ export class ApiServiceService {
   sendPasswordResetLink(data:any){
     return this.http.post(this.appendUrl('/sendPasswordResetLink'), data);
   }
+
 }

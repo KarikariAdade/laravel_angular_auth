@@ -1,3 +1,5 @@
+import { Helper } from './../../../helpers/helper';
+import { ApiServiceService } from './../../../services/api-service.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,9 +9,26 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RequestResetComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private apiService: ApiServiceService,
+    // private helper: Helper,
+  ) { }
 
   ngOnInit(): void {
+  }
+
+  public error = null;
+
+  public form = {
+    email: null
+  }
+
+
+  onSubmit(){
+    this.apiService.sendPasswordResetLink(this.form).subscribe(
+      (res) => {},
+      (error) => {}
+    )
   }
 
 }
