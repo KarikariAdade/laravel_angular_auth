@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
@@ -15,7 +17,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login']]);
+        $this->middleware('auth:api', ['except' => ['login', 'signup']]);
     }
 
     /**
@@ -29,11 +31,23 @@ class AuthController extends Controller
     {
         $credentials = $request->only('email', 'password');
 
+        $validate = Validator::make($credentials, [
+            'email' => 'required',
+            'password' => 'required',
+        ]);
+
+        if ($validate->fails()){
+            return response()->json([
+                'code' => 402,
+                'msg' => $validate->errors()->first()
+            ]);
+        }
+
         if ($token = $this->guard()->attempt($credentials)) {
             return $this->respondWithToken($token);
         }
 
-        return response()->json(['error' => 'Unauthorized'], 401);
+        return response()->json(['error' => 'invalid credentials'], 401);
     }
 
     /**
@@ -78,6 +92,7 @@ class AuthController extends Controller
     protected function respondWithToken($token)
     {
         return response()->json([
+            'code' => 200,
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => $this->guard()->factory()->getTTL() * 60,
@@ -93,5 +108,31 @@ class AuthController extends Controller
     public function guard()
     {
         return Auth::guard();
+    }
+
+    public function signup(Request $request)
+    {
+        $data = $request->all();
+
+        $validate = Validator::make($data, [
+            'email' => 'required|email|unique:users',
+            'password' => 'required|confirmed',
+            'name' => 'required'
+        ]);
+
+        if ($validate->fails()){
+            return response()->json([
+                'code' => 402,
+                'msg' => $validate->errors()->first()
+            ]);
+        }
+
+        User::query()->create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['password'])
+        ]);
+
+        return $this->login($request);
     }
 }
