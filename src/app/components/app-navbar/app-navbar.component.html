@@ -37,10 +37,11 @@
       <!-- Left links -->
 
       <div class="d-flex align-items-center">
-        <a routerLink="/signup" class="btn btn-primary me-3">
+        <a routerLink="/signup" class="btn btn-primary me-3" *ngIf="!loggedIn">
           Sign Up
         </a>
-        <a routerLink="/login" class="btn btn-primary me-3">Login</a>
+        <a routerLink="/login" class="btn btn-primary me-3" *ngIf="!loggedIn">Login</a>
+        <a routerLink="/logout" class="btn btn-primary me-3" *ngIf="loggedIn">Log Out</a>
       </div>
     </div>
     <!-- Collapsible wrapper -->
