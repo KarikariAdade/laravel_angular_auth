@@ -1,6 +1,7 @@
 import { Helper } from './../../../helpers/helper';
 import { ApiServiceService } from './../../../services/api-service.service';
 import { Component, OnInit } from '@angular/core';
+import {SnotifyService} from 'ng-snotify';
 
 @Component({
   selector: 'app-request-reset',
@@ -11,11 +12,13 @@ export class RequestResetComponent implements OnInit {
 
   constructor(
     private apiService: ApiServiceService,
+    private snotifyService: SnotifyService
     // private helper: Helper,
   ) { }
 
   ngOnInit(): void {
   }
+
 
   public error = null;
 
@@ -26,9 +29,25 @@ export class RequestResetComponent implements OnInit {
 
   onSubmit(){
     this.apiService.sendPasswordResetLink(this.form).subscribe(
-      (res) => {},
+      (res:any) => {
+        if(res.code == 200){
+          this.snotifyService.success('Example body content', {
+            timeout: 2000,
+            showProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true
+          });
+        }else{
+
+        }
+
+      },
       (error) => {}
     )
+  }
+
+  handleResponse(data: any){
+    this.form.email = null;
   }
 
 }

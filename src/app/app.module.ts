@@ -16,6 +16,8 @@ import { ResponseResetComponent } from './components/password/response-reset/res
 import { LoginComponent } from './components/login/login.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { SnotifyModule, SnotifyService, ToastDefaults } from 'ng-snotify';
+
 
 @NgModule({
   declarations: [
@@ -33,6 +35,7 @@ import { FormsModule } from '@angular/forms';
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
+    SnotifyModule
   ],
   providers: [
     AfterLoginService,
@@ -40,6 +43,8 @@ import { FormsModule } from '@angular/forms';
     AuthService,
     BeforeLoginService,
     TokenService,
+    { provide: 'SnotifyToastConfig', useValue: ToastDefaults},
+    SnotifyService
   ],
   bootstrap: [AppComponent]
 })

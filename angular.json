@@ -28,7 +28,8 @@
             ],
             "styles": [
               "src/styles.css",
-              "src/assets/mdb.min.css"
+              "src/assets/mdb.min.css",
+              "../node_modules/ng-snotify/styles/material.scss"
             ],
             "scripts": [
               "src/assets/mdb.min.js"
