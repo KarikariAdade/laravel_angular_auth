@@ -53,9 +53,15 @@ export class SignupComponent implements OnInit {
   }
 
   handleResponse(data:any) {
+    // handle token service
     this.token.handle(data.access_token);
+
+    // change the auth status observable
     this.auth.changeAuthStatus(true);
+
+    // redirect user to profile
     this.router.navigateByUrl('/profile');
+
   }
 
   handleError(error:string) {

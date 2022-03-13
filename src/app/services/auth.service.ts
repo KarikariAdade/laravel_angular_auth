@@ -14,9 +14,13 @@ export class AuthService {
 
   private loggedIn = new BehaviorSubject <boolean> (this.token.loggedIn() )
 
+  // The loggedIn being set an an observable value to authStatus ensures that
+  // authStatus has the latest value when loggedIn value changes
+
   authStatus = this.loggedIn.asObservable();
 
   changeAuthStatus(value:boolean){
+    // This changes the status of the loggedIn value when called
     this.loggedIn.next(value);
   }
 }
