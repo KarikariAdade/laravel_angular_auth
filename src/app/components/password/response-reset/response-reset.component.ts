@@ -1,7 +1,8 @@
 import { Helper } from './../../../helpers/helper';
 import { ApiServiceService } from './../../../services/api-service.service';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { SnotifyService } from 'ng-snotify';
 
 @Component({
   selector: 'app-response-reset',
@@ -13,7 +14,9 @@ export class ResponseResetComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private apiService: ApiServiceService,
-    private helper: Helper
+    private helper: Helper,
+    private notify: SnotifyService,
+    private router: Router,
   ) {
     route.queryParamMap.subscribe(
       (params:any) => {
@@ -65,6 +68,18 @@ export class ResponseResetComponent implements OnInit {
   }
 
   handleResponse(msg:string){
+
+    let _router = this.router;
+
+    this.notify.confirm('Done!, Now login with new password', {
+      buttons: [
+        {text: 'Okay', action: toaster => {
+          _router.navigateByUrl('/login'),
+          this.notify.remove(toaster.id)
+        }
+        },
+      ]
+    });
     this.error = msg;
   }
 

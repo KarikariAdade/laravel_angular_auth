@@ -28,6 +28,7 @@ export class RequestResetComponent implements OnInit {
 
 
   onSubmit(){
+    this.snotifyService.info('Wait...', {timeout: 5000})
     this.apiService.sendPasswordResetLink(this.form).subscribe(
       (res:any) => {
         if(res.code == 200){
